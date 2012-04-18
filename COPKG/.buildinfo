@@ -1,0 +1,11 @@
+* target information */
+@import "version.inc";
+
+#product-info  {
+	product-name: "re2c";
+	version: "${package-version}";
+	original-source-location: "http://sourceforge.net/projects/re2c/files/re2c/0.13.5/";
+	original-source-website: "http://re2c.org";
+	license: "Simplified BSD License";
+	packager: "Elizabeth M Smith <auroraeosrose@gmail.com>";
+}
