@@ -9,3 +9,9 @@ identity[CoApp Project] {
     email: "<a href='mailto:coapp@coapp.org'>coapp@coapp.org</a>";
     website: "<a href='http://coapp.org'>http://coapp.org</a>";
 }
+
+identity[Elizabeth M Smith] {
+    name : "Elizabeth M Smith, Developer";
+    email: "<a href='mailto:auroraeosrose@gmail.com'>auroraeosrose@gmail.com</a>";
+    website: "<a href='http://emsmith.net/projects'>http://emsmith.net</a>";
+}
