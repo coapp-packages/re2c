@@ -1,17 +1,17 @@
 package {
-    location: "<a href='http://coapp.org/repository/re2c.msi>http://coapp.org/repository/re2c.msi/a>";
-    feed: "<a href='http://coapp.org/repository/packages.atom.xml'>http://coapp.org/repository/packages.atom.xml</a>";
+    location: "http://coapp.org/repository/${OutputFilename}";
+    feed: "http://coapp.org/repository/packages.atom.xml";
     publisher: "Outercurve Foundation, CoApp Project";
 }
 
 identity[CoApp Project] {
     name : "CoApp Project, Outercurve Foundation";
-    email: "<a href='mailto:coapp@coapp.org'>coapp@coapp.org</a>";
-    website: "<a href='http://coapp.org'>http://coapp.org</a>";
+    email: "coapp@coapp.org";
+    website: "http://coapp.org";
 }
 
 identity[Elizabeth M Smith] {
     name : "Elizabeth M Smith, Developer";
-    email: "<a href='mailto:auroraeosrose@gmail.com'>auroraeosrose@gmail.com</a>";
-    website: "<a href='http://emsmith.net/projects'>http://emsmith.net</a>";
+    email: "auroraeosrose@gmail.com";
+    website: "http://emsmith.net";
 }
