@@ -41,7 +41,8 @@ release {
 
 test {
     uses: release;
-    build-command: @"";
+    build-command: @"
+    ";
 }
 
 sign {
@@ -87,7 +88,7 @@ package {
         pushd COPKG
         for %%A in (${COMP}) do (
             for %%B in (${PLAT}) do (
-                autopackage.exe COPKG\re2c.autopkg --flav=%%A --arc=%%B
+                autopackage.exe re2c.autopkg --flav=%%A --arc=%%B
             )
         )
         popd
