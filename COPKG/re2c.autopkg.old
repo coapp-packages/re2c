@@ -1,0 +1,70 @@
+@import "version.inc";
+@import "compat.inc";
+@import "outercurve.inc";
+
+#define { 
+    flavor: "${comp??vc10}"; 
+    arch : "${arc??vc10}";
+}
+
+package {
+    name: "re2c[${flavor}]";
+    version: "${package-version}";
+    arch : "${arch}";
+    
+    display-name: "re2c";
+
+    publisher: "CoApp Project";
+}
+
+files[files-to-sign] {
+    include: { 
+        exes
+    };    
+}
+
+files[exes] {
+    root: @"..\output\${flavor}\${arch}\Release\";
+  
+    include: {
+        "re2c.exe",
+    };
+    
+    trim-path: all;
+};
+
+metadata {
+    summary: "re2c";
+    description:  @"re2c is a tool for writing very fast and very flexible scanners. Unlike any other such tool, re2c focuses on generating high efficient code for regular expression matching. As a result this allows a much broader range of use than any traditional lexer offers. And Last but not least re2c generates warning free code that is equal to hand-written code in terms of size, speed and quality."; 
+
+    bug-tracker: "https://github.com/coapp-packages/re2c/issues";
+    stability : "0";
+}
+
+application[re2c[${flavor}]] {
+    include : {
+        exes
+    };
+}
+
+signing {
+    attributes : {
+        company="Outercurve Foundation",
+        description="${Package.PackageDetails.SummaryDescription}",
+        product-name="re2c",
+        product-version="${package-version}",
+        file-version="${package-version}",
+    };
+    
+    replace-signature: true; 
+    include: { 
+        files-to-sign
+    };    
+}
+
+package-composition {
+    symlinks : {
+        exes => @"${bin}\${each.Name}" = @"${packagedir}\${each.Name}";
+    };
+}
+

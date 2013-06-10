@@ -1,70 +1,56 @@
-@import "version.inc";
-@import "compat.inc";
-@import "outercurve.inc";
-
-#define { 
-    flavor: "${comp??vc10}"; 
-    arch : "${arc??vc10}";
-}
-
-package {
-    name: "re2c[${flavor}]";
-    version: "${package-version}";
-    arch : "${arch}";
-    
-    display-name: "re2c";
-
-    publisher: "CoApp Project";
-}
-
-files[files-to-sign] {
-    include: { 
-        exes
-    };    
-}
-
-files[exes] {
-    root: @"..\output\${flavor}\${arch}\Release\";
-  
-    include: {
-        "re2c.exe",
-    };
-    
-    trim-path: all;
+configurations {
+		
 };
 
-metadata {
-    summary: "re2c";
-    description:  @"re2c is a tool for writing very fast and very flexible scanners. Unlike any other such tool, re2c focuses on generating high efficient code for regular expression matching. As a result this allows a much broader range of use than any traditional lexer offers. And Last but not least re2c generates warning free code that is equal to hand-written code in terms of size, speed and quality."; 
+nuget {
+	// the nuspec file metadata. Gets created/updated on build
+	nuspec {
+		id = re2c;
+		version : 0.13.5.2;
+		title: re2c scanner generator;
+		authors: {re2c contributors};
+		owners: {CoApp Project, Tom Hanrahan};
+		licenseUrl: "http://sourceforge.net/directory/os:windows/license:publicdomain/";
+		projectUrl: "http://sourceforge.net/projects/re2c/";
+		iconUrl: "http://sourceforge.net/p/re2c/code/HEAD/tree/trunk/re2c/htdocs/logo.png";
+		requireLicenseAcceptance:false;
+		summary:re2c scanner generator;
+		description: @"re2c is a tool for writing very fast and very flexible scanners
+	Tidy homepage:  http://rec2.org";
+		releaseNotes:http://sourceforge.net/p/re2c/code/HEAD/tree/tags/RELEASE_0_13_5/re2c/htdocs/index.html
+		copyright: Copyright 2013;
+		tags: { re2c, native, CoApp };
 
-    bug-tracker: "https://github.com/coapp-packages/re2c/issues";
-    stability : "0";
-}
+	};
 
-application[re2c[${flavor}]] {
-    include : {
-        exes
-    };
-}
+	// the files that go into the content folders
+	// (inserted into the nuspec file)
+	files {
 
-signing {
-    attributes : {
-        company="Outercurve Foundation",
-        description="${Package.PackageDetails.SummaryDescription}",
-        product-name="re2c",
-        product-version="${package-version}",
-        file-version="${package-version}",
-    };
+		docs: { 
+            ..\htdocs\manual.html.in															
+        };
     
-    replace-signature: true; 
-    include: { 
-        files-to-sign
-    };    
-}
+		("v100,v110", "Win32,x64", "release,debug", "Dynamic,Static,ltcg") => {
+			[${0},${1},${2},${3}] {
+				tools:     { .\output\${0}\${1}\${2}\${3}\re2c.exe };
+			};
+		};
 
-package-composition {
-    symlinks : {
-        exes => @"${bin}\${each.Name}" = @"${packagedir}\${each.Name}";
-    };
+	};
+
+	// the VC++ .props file that gets generated and inserted into the ${d_content} folder
+	props { 
+		// we're going to generate a number of properties anyway. 
+        // so even if the packager doesn't specify the props object 
+        // we're going to make this file.
+	};
+
+	// the VC++ .targets file that gets generated and inserted into the ${d_content} folder
+	targets {
+		// every configuration needs to reference the include directories.
+
+			
+	};
 }
 

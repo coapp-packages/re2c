@@ -1,96 +1,32 @@
-@import "version.inc";
+@import default_tools;
 
-#define {
-    NewVersion : "${package-version++}";
-}
+default {
+    (PlatformToolsets, Architectures, ReleaseOrDebug, Linkage, "re2c.vcxproj," ) => {
+        .PushEnvironment{};
+        .LoadSystemEnvironment{};
+        .SetEnvironmentFromTarget.Target = "VC_${0}_${1}";
+        
+        .Message.Text = @"Environment vc_${0}_${1} -- ${2}  ${3}  *** IsValid => $(IsEnvironmentValid)";
 
-#product-info  {
-	product-name: "re2c";
-	version: "${NewVersion}";
-	original-source-location: "http://sourceforge.net/projects/re2c/files/re2c/0.13.5/";
-	original-source-website: "http://re2c.org";
-	license: "Simplified BSD License";
-	packager: "Elizabeth M Smith <auroraeosrose@gmail.com>";
-}
+        .Warning{
+            Condition="!$(IsEnvironmentValid)";
+            Text = @"********\r\nSKIPPING: vc_${0}_${1} -- ${2}  ${3}  ";
+        };
 
-build {
-    set: {
-        BuildCfg="${BuildCfg??Debug}";
-        flav="${flav??vc10}";
-        arch="${arch??x86}";
+        .Exec {
+            Condition="$(IsEnvironmentValid)";
+            Command = @"msbuild ${4} /p:PlatformToolset=${0};Platform=${1};Configuration=${2};UsesConfigurationType=${3}";
+        };
+
+        .PopEnvironment{};
     };
-    
-    compiler: "${flav}";
-    platform: "${arch}";
-    
-    targets:{};
-    build-command: @"
-        msbuild /p:Configuration=%BuildCfg%  re2c-2010.sln
-    ";
-}
+};
 
-debug {
-    set: BuildCfg="Debug";
-    uses: build;
-}
+clean {
+    .RemoveDir.Directories = @"intermediate";
+};
 
-release {
-    set: BuildCfg="Release";
-    uses: build;
-}
-
-test {
-    uses: release;
-    build-command: @"
-    ";
-}
-
-sign {
-    set: {
-        COMP="${COMP??vc10}";
-		PLAT="${PLAT??x86}";
-    };
-    build-command: @"
-        for %%A in (${COMP}) do (
-            for %%B in (${PLAT}) do (
-                if ""${BUILT}"" neq ""true"" ptk release --nologo --flav=""%%A"" --arch=""%%B""
-                simplesigner.exe --nologo output\%%A\%%B\Release\**.dll output\%%A\%%B\Release\**.exe
-            )
-        )
-    ";
-}
-
-update-version {
-    default : false;
-    
-    build-command : @"
-        REM auto-increment version.inc file...
-        if ""${noversion}"" == ""true"" goto :endver
-        pushd COPKG
-        setlocal EnableDelayedExpansion
-        set VERSTRING=#define { package-version: ${NewVersion}; }
-        echo !VERSTRING! > version.inc
-        popd
-:endver
-    ";
-}
-
-package {
-    set: {
-        COMP="${COMP??vc10}";
-		PLAT="${PLAT??x86}";
-    };
-    uses: {
-        update-version,
-        sign,
-    };
-    build-command: @"
-        pushd COPKG
-        for %%A in (${COMP}) do (
-            for %%B in (${PLAT}) do (
-                autopackage.exe re2c.autopkg --flav=%%A --arc=%%B
-            )
-        )
-        popd
-    ";
-}
+nuke {
+    .RemoveDir.Directories = @"output";
+    .RemoveDir.Directories = @"intermediate";
+};
